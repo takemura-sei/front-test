@@ -6,4 +6,8 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@nuxt/test-utils/module"
   ],
+  runtimeConfig: {
+    yumemibaseUrl: process.env.NUXT_YUMEMI_URL,
+    yumemiApiKey: process.env.NUXT_YUMEMI_API_KEY,
+  }
 });
