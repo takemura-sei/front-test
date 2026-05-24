@@ -59,10 +59,15 @@ const chartData = computed(() => {
     datasets
   }
 })
+
+const chartOption = {
+  responsive: true,
+  maintainAspectRatio: false,
+}
 </script>
 
 <template>
-  <div>
-    <Line :data="chartData" />
+  <div style="height: 500px">
+    <Line :data="chartData" :options="chartOption" />
   </div>
 </template>
