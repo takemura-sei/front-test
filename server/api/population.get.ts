@@ -5,8 +5,9 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   const res = await $fetch<PopulationResponse>(
-    `${config.yumemibaseUrl}/api/v1/population/composition/perYear?prefCode=${query.prefCode}`,
+    `${config.yumemibaseUrl}/api/v1/population/composition/perYear`,
     {
+      query: { prefCode: query.prefCode },
       headers: {
         'X-API-KEY': config.yumemiApiKey,
       },

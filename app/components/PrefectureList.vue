@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { usePrefectures } from '~/composables/usePrefectures'
-import { usePopulation } from '~/composables/usePopulation'
-
 const { data, error, pending } = usePrefectures()
 const { addPrefecture, removePrefecture } = usePopulation()
 

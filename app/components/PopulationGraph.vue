@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { usePopulation } from '~/composables/usePopulation'
-import { usePrefectures } from '~/composables/usePrefectures'
-
 import {
   Chart as ChartJS,
   CategoryScale,
