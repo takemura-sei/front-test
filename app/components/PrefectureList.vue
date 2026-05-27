@@ -3,7 +3,7 @@ import { usePrefectures } from '~/composables/usePrefectures'
 import { usePopulation } from '~/composables/usePopulation'
 
 const { data, error, pending } = usePrefectures()
-const { populationMap, addPrefecture, removePrefecture } = usePopulation()
+const { addPrefecture, removePrefecture } = usePopulation()
 
 const handleChange = (prefCode: number, event: Event) => {
   const checked = (event.target as HTMLInputElement).checked
