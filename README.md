@@ -1,75 +1,102 @@
-# Nuxt Minimal Starter
+# 都道府県別人口推移グラフ
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+都道府県を選択すると人口推移グラフを表示する SPA です。
 
-## Setup
+**本番 URL**: https://front-test-one-iota.vercel.app/
 
-Make sure to install dependencies:
+## 機能
+
+- 都道府県をチェックボックスで複数選択し、折れ線グラフで人口推移を比較
+- 総人口 / 年少人口 / 生産年齢人口 / 老年人口の切り替え
+- 選択した都道府県ごとに異なる色で表示
+
+## 技術スタック
+
+| 項目 | 内容 |
+|------|------|
+| フレームワーク | Nuxt 4 |
+| スタイリング | Tailwind CSS v4 |
+| グラフ | vue-chartjs + Chart.js |
+| リンター/フォーマッター | Biome |
+| テスト | Vitest + @nuxt/test-utils |
+| デプロイ | Vercel |
+
+## セットアップ
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+`.env` ファイルを作成して環境変数を設定してください：
 
-Start the development server on `http://localhost:3000`:
+```
+NUXT_YUMEMI_URL=https://frontend-engineer-codecheck-api.mirai.yumemi.io
+NUXT_YUMEMI_API_KEY=your_api_key
+```
+
+## 開発サーバー起動
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+`http://localhost:3000` で確認できます。
 
-Build the application for production:
+## コマンド一覧
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+npm run dev       # 開発サーバー起動
+npm run build     # プロダクションビルド
+npm run lint      # リント
+npm run format    # フォーマット
+npm run test      # テスト実行
 ```
 
-Locally preview production build:
+## アーキテクチャ
 
-```bash
-# npm
-npm run preview
+### API キーの保護
 
-# pnpm
-pnpm preview
+API キーはサーバーサイドのみで使用します。Nuxt のサーバールートをプロキシとして使用することで、クライアントバンドルに API キーが含まれないようにしています。
 
-# yarn
-yarn preview
-
-# bun
-bun run preview
+```
+ブラウザ → Nuxt サーバールート（/api/prefectures） → 外部 API
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+### 状態管理
+
+Pinia は使用せず、composable のモジュールスコープに `ref` を置くことでグローバル状態を管理しています。
+
+```typescript
+// usePopulation.ts
+const populationMap = ref<Map<number, PopulationData[]>>(new Map())
+
+export const usePopulation = () => {
+  // ...
+}
+```
+
+## ディレクトリ構成
+
+```
+app/
+├── components/
+│   ├── PrefectureList.vue        # 都道府県チェックボックス一覧
+│   ├── PopulationGraph.vue       # 折れ線グラフ
+│   └── PopulationTypeSelector.vue # 人口種別ラジオボタン
+├── composables/
+│   ├── usePrefectures.ts         # 都道府県一覧取得
+│   └── usePopulation.ts          # 人口データ管理
+├── pages/
+│   └── index.vue                 # メインページ
+├── types/
+│   └── api.ts                    # API レスポンス型定義
+└── tests/
+    ├── unit/
+    │   └── usePopulation.test.ts
+    └── nuxt/
+        └── PrefectureList.test.ts
+server/
+└── api/
+    ├── prefectures.get.ts        # 都道府県一覧 API プロキシ
+    └── population.get.ts         # 人口データ API プロキシ
+```
